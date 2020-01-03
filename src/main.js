@@ -1,6 +1,6 @@
 import Vue from 'vue'
-// import App from './App.vue'
-import App from './views/Login.vue'
+import App from './App.vue'
+// import App from './views/Login.vue'
 
 import router from '@/router/index.js'
 
