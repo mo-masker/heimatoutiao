@@ -6,7 +6,7 @@ import VueRouter from 'vue-router'
 Vue.use(VueRouter)
 
 // 引入路由所映射的组件
-import login from '@/views/login.vue'
+import login from '@/views/Login.vue'
 
 //创建路由对象
 let router = new VueRouter({
