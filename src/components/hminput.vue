@@ -29,9 +29,14 @@ export default {
     },
     // 当失去焦点时，再次验证用户的输入是否合法，如果不合法则给出明确的提示
     handleBlur(){
-      let value = event.target.value
+      let value = event.target.value;
       if(this.rules && !this.rules.test(value)){
         console.log(this.msg || '输入不正确');
+        this.$toast.fail({
+        message:this.msg || '输入不正确',
+        // 显示时间
+        duration:5000
+    })
       }
     }
   }

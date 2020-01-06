@@ -4,6 +4,12 @@ import App from './App.vue'
 
 import router from '@/router/index.js'
 
+import { Button, Toast } from 'vant';
+
+Vue.use(Button)
+   .use(Toast)
+
+
 // 引入全局样式
 import '@/styles/reset.css'
 Vue.config.productionTip = false
