@@ -70,6 +70,7 @@ export default {
           this.$toast.fail(res.data.message);
         } else {
           // 实现页面的跳转
+          this.$router.push({name:'Personal'})
         }
       }else{
         this.$toast.fail('数据输入不合法')
