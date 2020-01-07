@@ -10,19 +10,14 @@
       <div class="inputs">
         <!-- 使用封装组件时的属性设置默认会设置给封装组件的根元素 -->
         <!-- 如果封装组件设置了props，那么优先为props中的成员赋值 -->
-        <hminput 
-        placeholder="用户名/手机号" 
-        :rules="/^(\d{5,6})$|^(\d{10})$/" 
-        msg="用户名或者手机号输入不正确" 
-        :value="users.username" 
-        @input="handleinput"
+        <hminput
+          placeholder="用户名/手机号"
+          :rules="/^(\d{5,6})$|^(\d{10})$/"
+          msg="用户名或者手机号输入不正确"
+          :value="users.username"
+          @input="handleinput"
         ></hminput>
-        <hminput 
-        placeholder="密码" 
-        :rules='/^\S{3,16}$/' 
-        msg="请输入3-16位的密码" 
-        v-model="users.password"
-        ></hminput>
+        <hminput placeholder="密码" :rules="/^\S{3,16}$/" msg="请输入3-16位的密码" v-model="users.password"></hminput>
       </div>
       <p class="tips">
         没有账号？
@@ -36,28 +31,51 @@
 <script>
 import hmbutton from "@/components/hmbutton.vue";
 import hminput from "@/components/hminput.vue";
-import { login } from "@/apis/user.js"
+import { login } from "@/apis/user.js";
 export default {
-  data(){
-    return{
-      users:{
-      username:'10086',
-      password:'123'
-    }
-    }
+  data() {
+    return {
+      users: {
+        username: "10086",
+        password: "123"
+      }
+    };
   },
   components: {
     hmbutton,
     hminput
   },
   methods: {
-    login() {
-      console.log(this.users);
-      login(this.users)
-      .then()
-      .catch()
+    // 标记当前方法中有异步操作
+    async login() {
+      // 打印出实时输入的数据
+      // console.log(this.users);
+      // login(this.users)
+      // .then(res =>{
+      //   console.log(res);
+      // })
+      // .catch(err =>{
+      //   console.log(err);
+      // })
+
+      // 验证数据
+      if (
+        /^(\d{5,6})$|^1(\d{10})$/.test(this.users.username) &&
+        /^\S{3,16}$/.test(this.users.password)
+      ) {
+        let res = await login(this.users);
+        console.log(res);
+        if (res.data.message === "用户不存在") {
+          // 给用户提示
+          this.$toast.fail(res.data.message);
+        } else {
+          // 实现页面的跳转
+        }
+      }else{
+        this.$toast.fail('数据输入不合法')
+      }
     },
-    handleinput(data){
+    handleinput(data) {
       this.users.username = data;
     }
   }
