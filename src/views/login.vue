@@ -69,8 +69,12 @@ export default {
           // 给用户提示
           this.$toast.fail(res.data.message);
         } else {
+          // 将当前接收到的token实现本地存储
+          localStorage.setItem('toutiao_41_token',res.data.data.token)
+          // 为了后期的操作，将当前用户数据也存储到本地
+          localStorage.setItem('toutiao_41_userInfo',JSON.stringify(res.data.data.user))
           // 实现页面的跳转
-          this.$router.push({name:'Personal'})
+          this.$router.push({name:`Personal/${res.data.data.user.id}`})
         }
       }else{
         this.$toast.fail('数据输入不合法')
