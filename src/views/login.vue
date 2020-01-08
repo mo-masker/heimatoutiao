@@ -74,7 +74,7 @@ export default {
           // 为了后期的操作，将当前用户数据也存储到本地
           localStorage.setItem('toutiao_41_userInfo',JSON.stringify(res.data.data.user))
           // 实现页面的跳转
-          this.$router.push({name:`Personal/${res.data.data.user.id}`})
+          this.$router.push({path:`Personal/${res.data.data.user.id}`})
         }
       }else{
         this.$toast.fail('数据输入不合法')
