@@ -3,12 +3,12 @@
     <router-link to="/edit_profile">
       <div class="profile">
         <!-- $axios.defaults.baseURL读取axios的服务器路径 -->
-        <img src="http://img1.imgtn.bdimg.com/it/u=3757784226,1202878475&fm=26&gp=0.jpg" alt />
+        <img :src="currentUser.head_img" alt />
         <div class="profile-center">
           <div class="name">
-            <span class="iconfont iconxingbienan"></span>我就是我
+            <span class="iconfont iconxingbienan"></span>{{currentUser.nickname}}
           </div>
-          <div class="time">2019-9-24</div>
+          <div class="time">{{currentUser.create_date}}</div>
         </div>
         <span class="iconfont iconjiantou1"></span>
       </div>
@@ -24,12 +24,31 @@
 <script>
 import hmcell from '@/components/hmcell.vue'
 import hmbutton from '@/components/hmbutton.vue'
+import {getUserById} from '@/apis/user.js'
 export default {
+  data(){
+    return {
+      // 当前登录对象的数据
+      currentUser:{}
+    }
+  },
+  // 注册
   components:{
     hmcell,hmbutton
   },
-  mounted(){
+  // 钩子函数
+  async mounted(){
     console.log(this.$route.params.id);
+    let res = await getUserById(this.$route.params.id)
+    // console.log(res);
+    if(res.data.message === '获取成功'){
+      this.currentUser = res.data.data
+      // 把图片的路径指向当前服务器
+      this.currentUser.head_img = 'http://127.0.0.1:3000' + this.currentUser.head_img
+      console.log(this.currentUser);
+    }else if(res.data.message === '用户信息验证失败'){
+      this.$router.push({name: 'login'})
+    }
   }
 }
 </script>

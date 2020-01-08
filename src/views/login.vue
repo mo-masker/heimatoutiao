@@ -63,8 +63,9 @@ export default {
         /^(\d{5,6})$|^1(\d{10})$/.test(this.users.username) &&
         /^\S{3,16}$/.test(this.users.password)
       ) {
+        // 得到login函数的返回值
         let res = await login(this.users);
-        console.log(res);
+        // console.log(res);
         if (res.data.message === "用户不存在") {
           // 给用户提示
           this.$toast.fail(res.data.message);
