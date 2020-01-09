@@ -4,11 +4,12 @@ import App from './App.vue'
 
 import router from '@/router/index.js'
 
-import { Button, Toast, Icon } from 'vant';
+import { Button, Toast, Icon, Uploader } from 'vant';
 
 Vue.use(Button)
   .use(Toast)
-  .use(Icon);
+  .use(Icon)
+  .use(Uploader)
 
 
 // 引入全局样式
