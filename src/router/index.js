@@ -8,6 +8,7 @@ Vue.use(VueRouter)
 // 引入路由所映射的组件
 import login from '@/views/Login.vue'
 import Personal from '@/views/Personal.vue'
+import EditPersonal from '@/views/EditPersonal.vue'
 
 //创建路由对象
 let router = new VueRouter({
@@ -22,6 +23,11 @@ let router = new VueRouter({
             name: 'Personal',
             path: '/personal/:id',
             component: Personal
+        },
+        {
+            name: 'EditPersonal',
+            path: '/editPersonal/:id',
+            component: EditPersonal
         }
     ]
 })
