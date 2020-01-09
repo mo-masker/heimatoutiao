@@ -38,14 +38,14 @@ export default {
   },
   // 钩子函数
   async mounted(){
-    console.log(this.$route.params.id);
+    // console.log(this.$route.params.id);
     let res = await getUserById(this.$route.params.id)
     // console.log(res);
     if(res.data.message === '获取成功'){
       this.currentUser = res.data.data
       // 把图片的路径指向当前服务器
       this.currentUser.head_img = 'http://127.0.0.1:3000' + this.currentUser.head_img
-      console.log(this.currentUser);
+      // console.log(this.currentUser);
     }else if(res.data.message === '用户信息验证失败'){
       this.$router.push({name: 'login'})
     }
