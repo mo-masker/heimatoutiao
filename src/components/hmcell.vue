@@ -1,5 +1,5 @@
 <template>
-  <div class="cell">
+  <div class="cell" @click="handlerclick">
       <div class="left">{{title}}</div>
       <!-- <div class="right">{{desc}}<span class="iconfont iconjiantou1"></span></div> -->
       <div class="right">{{type==='password'?"******":desc}}<span class="iconfont iconjiantou1"></span></div>
@@ -8,7 +8,13 @@
 
 <script>
 export default {
-    props:['title','desc','type']
+    props:['title','desc','type'],
+    methods:{
+        handlerclick(event){
+            // 发起click事件
+            this.$emit('click',event)
+        }
+    }
 }
 </script>
 
