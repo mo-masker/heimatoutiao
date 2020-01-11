@@ -15,7 +15,7 @@
       <van-field ref="nick" :value="currentUser.nickname" required label="昵称" placeholder="请输入昵称" />
     </van-dialog>
     <hmcell title="密码" :desc="currentUser.password" type="password" @click="passshow=!passshow"></hmcell>
-    <van-dialog v-model="passshow" title="修改密码" show-cancel-button @confirm="updatePassword">
+    <van-dialog v-model="passshow" title="修改密码" show-cancel-button @confirm="updatePassword" :before-close="beforeClose">
       <van-field ref="originPass" required label="原密码" placeholder="请输入原密码" />
       <van-field ref="newPass" required label="新密码" placeholder="请输入新密码" />
     </van-dialog>
@@ -127,12 +127,34 @@ export default {
           }else{
             this.$toast.fail("修改失败")
           }
+        }
+      }
+    },
+    beforeClose(action,done){
+      // console.log(action);
+      // 如果用户单击的是确认，那么就需要判断原密码是否输入正确
+      if(action === "confirm"){
+        // 获取用户输入的原密码
+        let originPass = this.$refs.originPass.$refs.input.value;
+        // 获取原密码进行密码是否正确的判断
+        if(originPass!==this.currentUser.password){
+          // 给出提示
+          this.$toast.fail("原密码输入不正确")
+          // 阻止dialog的关闭
+          this.$refs.originPass.$refs.input.select();
+          this.$refs.originPass.$refs.input.focus();
+          done(false)
+        }else if(!/^\S{3,16}$/.test(this.$refs.newPass.$refs.input.value)){
+          this.$toast.fail("请输入3-16位的新密码")
+          done(false)
         }else{
-            this.$toast.fail("密码格式错误")
-          }
+          // 如果这里没有添加done，那么窗口不会关闭
+          done()
+        }
       }else{
-            this.$toast.fail("密码验证失败")
-          }
+        // 点了取消就关闭dialog
+        done()
+      }
     }
   }
 };
