@@ -10,21 +10,15 @@
       <img :src="currentUser.head_img" alt />
       <van-uploader :after-read="afterRead" />
     </div>
-    <hmcell
-      title="昵称"
-      :desc="currentUser.nickname"
-      @click="nickshow=!nickshow"
-      
-    ></hmcell>
+    <hmcell title="昵称" :desc="currentUser.nickname" @click="nickshow=!nickshow"></hmcell>
     <van-dialog v-model="nickshow" title="修改昵称" show-cancel-button @confirm="updateNickname">
-      <van-field 
-      ref="nick" 
-      :value="currentUser.nickname" 
-      required 
-      label="昵称" 
-      placeholder="请输入昵称" />
+      <van-field ref="nick" :value="currentUser.nickname" required label="昵称" placeholder="请输入昵称" />
     </van-dialog>
-    <hmcell title="密码" :desc="currentUser.password" type="password"></hmcell>
+    <hmcell title="密码" :desc="currentUser.password" type="password" @click="passshow=!passshow"></hmcell>
+    <van-dialog v-model="passshow" title="修改密码" show-cancel-button @confirm="updatePassword">
+      <van-field ref="originPass" required label="原密码" placeholder="请输入原密码" />
+      <van-field ref="newPass" required label="新密码" placeholder="请输入新密码" />
+    </van-dialog>
     <hmcell title="性别" :desc="currentUser.gender===1?'男':'女'"></hmcell>
   </div>
 </template>
@@ -45,7 +39,8 @@ export default {
       // 新建一个对象存储用户数据
       currentUser: {},
       // 修改昵称对话框是否可见
-      nickshow: false
+      nickshow: false,
+      passshow: false
     };
   },
   async mounted() {
@@ -103,13 +98,41 @@ export default {
         nickname: name
       });
       console.log(res);
-      if(res.data.message === '修改成功'){
+      if (res.data.message === "修改成功") {
         //为了实现页面的刷新效果，需要将页面中昵称的绑定数据进行更新
         this.currentUser.nickname = name;
-        this.$toast.success("修改成功")
-      }else{
-        this.$toast.fail("修改失败")
+        this.$toast.success("修改成功");
+      } else {
+        this.$toast.fail("修改失败");
       }
+    },
+    //修改密码
+    async updatePassword() {
+      // 获取用户输入的原密码，判断和用户密码是否匹配
+      // 如果匹配，则获取用户输入的新密码，判断是否符合正则规范，如果符合，则获取新密码，实现密码的修改，如果不符合则给出提示
+      // 如果原密码输入不正确，则给出提示
+      let originPass = this.$refs.originPass.$refs.input.value;
+      // console.log(originPass);
+      if(originPass===this.currentUser.password){
+        //获取输入的新密码
+        let newPass = this.$refs.newPass.$refs.input.value;
+        // console.log(newPass);
+        if(/^\S{3,16}$/.test(newPass)){
+          let res = await updateUserById(this.currentUser.id,{password:newPass});
+          // console.log(res);
+          if(res.data.message === "修改成功"){
+            // 为了实现页面的刷新效果，需要将页面中昵称的绑定数据进行更新
+            this.currentUser.password = newPass;
+            this.$toast.success("修改成功")
+          }else{
+            this.$toast.fail("修改失败")
+          }
+        }else{
+            this.$toast.fail("密码格式错误")
+          }
+      }else{
+            this.$toast.fail("密码验证失败")
+          }
     }
   }
 };
